@@ -1,0 +1,98 @@
+{% extends 'layout.html' %} {% block body %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        />
+        <style>
+            body {
+                background-color: powderblue;
+            }
+            h1 {
+                color: blue;
+            }
+            p {
+                color: red;
+            }
+            .button:hover {
+                background-color: #4caf50; /* Green */
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+                    0 17px 50px 0 rgba(0, 0, 0, 0.19);
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container" style="padding-top:5%">
+            <div class="row" style="text-align:center; padding:10px;">
+                <div class="col-md-4 col-md-offset-4">
+                    <h1>Sign In</h1>
+                </div>
+            </div>
+            <div class="row" style="padding:5%;">
+                <div class="col-md-4 col-md-offset-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Please sign in</h3>
+                        </div>
+                        <div class="panel-body">
+                            <form
+                                accept-charset="UTF-8"
+                                role="form"
+                                form
+                                action="/login/"
+                                method="post"
+                            >
+                                <fieldset>
+                                    <div class="form-group">
+                                        <input
+                                            class="form-control"
+                                            placeholder="Username"
+                                            name="username"
+                                            type="text"
+                                            required="true"
+                                            autofocus="true"
+                                            value="{{ request.form.username }}"
+                                        />
+                                    </div>
+                                    <div class="form-group">
+                                        <input
+                                            class="form-control"
+                                            placeholder="Password"
+                                            name="password"
+                                            type="password"
+                                            required="true"
+                                            value="{{ request.form.password }}"
+                                        />
+                                    </div>
+                                    <a href="afterLogin.html"
+                                        ><input
+                                            class="btn btn-lg btn-success btn-block"
+                                            type="submit"
+                                            value="Login"
+                                    /></a>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'auth/register_base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <form class="form-signin" method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+        <h2 class="form-signin-heading">Please sign up</h2>
+        <br>
+        <table>
+            {% for field in form %}
+                {% if field.help_text %}
+                    <tr style="color: black;">
+                        <td colspan="4">{{ field.help_text }}</td>
+                    </tr>
+                    <tr class="blank_row">
+                        <td colspan="4"></td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td>{{ field.label_tag }}</td>
+                    <td>{{ field }}</td>
+                </tr>
+                <tr class="blank_row">
+                    <td colspan="4"></td>
+                </tr>
+                {% if field.errors %}
+                    <tr style="color: red">
+                        <td colspan="4">{{ field.errors }}</td>
+                    </tr>
+                    <tr class="blank_row">
+                        <td colspan="4"></td>
+                    </tr>
+                {% endif %}
+
+            {% endfor %}
+        </table>
+        <button class="btn btn-lg btn-block" type="submit" style="background-color: black; color: white">Sign up</button>
+        <br>
+    </form>
+{% endblock %}
+

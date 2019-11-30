@@ -1,0 +1,122 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Virtual Fitting Room</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="icon" type="image/png" sizes="16x16" href="/fittingroom/static/images/favicon-16x16.png">
+    <style>
+        .form-signin {
+            max-width: 280px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                width: 750px;
+            }
+        }
+
+        .container {
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        .blank_row {
+            height: 10px !important; /* Overwrite any previous rules */
+            background-color: #FFFFFF;
+        }
+
+        .navbar-inverse .navbar-brand {
+            color: white;
+        }
+
+        .navbar-inverse .navbar-brand:hover,
+        .navbar-inverse .navbar-brand:focus {
+            color: #f8f8f8;
+        }
+
+        .nav.navbar-nav.navbar-right li a {
+            color: white;
+        }
+
+        .nav.navbar-nav.navbar-right li a:hover,
+        .nav.navbar-nav.navbar-right li a :focus {
+            color: #f8f8f8;
+        }
+
+        .footer-bottom p {
+            margin: 20px 0 0 0;
+            color: white;
+            font-size: 14px;
+        }
+
+        .footer-bottom {
+            position: fixed;
+            background: black;
+            padding: 30px 0;
+            left: 0px;
+            bottom: 0px;
+            height: 50px;
+            width: 100%;
+        }
+
+        .copyrights p, .diff p {
+            color: white;
+            font-size: 14px;
+            margin-top: 0;
+        }
+
+        .copyrights p a, .diff p a {
+            color: white;
+            margin-left: 2px;
+        }
+
+        .copyrights p a:hover, .diff p a:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'index' %}">Virtual Fitting Room</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{% url 'register' %}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    SignUp</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+
+
+<!-- <div class="footer-bottom text-center">
+    <div class="container">
+        <div class="copyrights">
+            <p> © 2016 PickTheProduct. All Rights Reserved | Design by <a href="#"> Ravali</a></p>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div> -->
+</body>
+</html>

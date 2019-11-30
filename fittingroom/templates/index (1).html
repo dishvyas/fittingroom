@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <title>Image Coordinates</title>
+  <body>
+    <div id="example">
+      <p id="test">x: , y:</p>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <!-- <img src="/home/dishant/Downloads/27072683_2099792156761281_2299653561078137726_n.jpg" height="200" width="200" alt="dragon"> -->
+    <script>
+      document.addEventListener("click", printMousePos, true);
+      function printMousePos(e) {
+        cursorX = e.pageX;
+        cursorY = e.pageY;
+        $("#test").text("pageX: " + cursorX + ",pageY: " + cursorY);
+      }
+      //         $(document).ready(function() {
+      //     $("img").on("click", function(event) {
+      //         var arr=[]
+      //         var x = event.pageX - this.offsetLeft;
+      //         var y = event.pageY - this.offsetTop;
+      //         arr.push(x,y)
+      //         console.log(arr)
+      //         // alert("X Coordinate: " + x + " Y Coordinate: " + y);
+      //     });
+      // });
+    </script>
+  </body>
+</html>

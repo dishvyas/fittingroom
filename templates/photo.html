@@ -1,0 +1,64 @@
+<!doctype html>
+<title>Select Endpoints</title>
+{% if str %}
+<img src="{{str}}">
+{% endif %}
+
+<body>
+    <div id="example">
+        <p id="test">x: y:</p>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>var exports = { "__esModule": true };</script>
+    <script src="templates/index.js"></script>
+
+    <script>
+        var count = 0;
+        var arr = [], fs;
+
+        // define(['require', 'fs'], function (require) {
+        //     fs = require('fs');
+        //     console.log(fs);
+        // })
+        document.addEventListener("click", printMousePos, true);
+        function printMousePos(e) {
+            cursorX = e.pageX;
+            cursorY = e.pageY;
+            arr.push([cursorX, cursorY]);
+            count++;
+            console.log(count);
+            console.log(arr);
+            console.log(cursorY);
+            console.log(cursorX);
+            $("#test").text("pageX: " + cursorX + ",pageY: " + cursorY);
+            if (count === 4) {
+                // render(arr);
+                // fs.writeFile('Output.txt', arr, (err) => {
+
+                // In case of a error throw err. 
+                // if (err) throw err;
+
+                // })
+                writedata(arr);
+                window.location.href = '/results';
+            }
+            function writedata(data) {
+                datajson = JSON.stringify(data)
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1/hack/post.php",
+                    data: { d: datajson},
+                    cache: false,
+
+                    success: function () {
+                        alert("OK");
+                    }
+                });
+
+            }
+        }
+
+
+
+    </script>
+</body>

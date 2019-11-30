@@ -1,0 +1,22 @@
+<html>
+
+    <head>
+
+        <meta charset="utf-8">
+        <title>MyFlaskApp</title>
+        <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css'>
+
+    </head>
+
+    <body>
+        <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js'></script>
+        
+        {%include 'includes/_navbar.html'%}
+
+        <div class='container'>
+            {% block body %}{% endblock %}
+        </div>    
+
+    </body>
+
+</html>
