@@ -101,4 +101,4 @@ def get2dfit(TSHIRTLOC, PERSONPIC,LS,RS,TOP,BOT):
     blend_glass3 = blend_transparent(rec_resize , glasses_resize_rotated)
     img_copy[y + glass_trans:y + h5 + glass_trans, x:x+w5 ] = blend_glass3
 
-    cv2.imwrite('result.jpg',img_copy)
+    cv2.imwrite('~\result.jpg',img_copy)

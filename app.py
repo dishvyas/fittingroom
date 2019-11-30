@@ -69,7 +69,27 @@ def routes():
 @app.route('/twodmodel')
 def twodmodel():
     with open("/opt/lampp/htdocs/hack/tmp.txt",'r') as f:
-        
+        line = f.readline()
+        line = line[1:]
+        line = line[:-1]
+        list_pts = line.split(',')
+        points = list()
+        for pt in list_pts:
+            pt= pt.replace('[','')
+            pt = pt.replace(']','')
+            points.append(int(pt))
+
+    ptuple = list()
+    k = 0
+    for i in range(0,4):
+        ptuple.append((points[k],points[k+1]))
+        k+= 2
+    get2dfit('/home/dishant/Desktop/Assignments/Hackathon/templates/2d.png',"/home/dishant/Desktop/Assignments/Hackathon/static/uploads/exp1.jpg",ptuple[0],ptuple[1],ptuple[2],ptuple[3])
+    return ptuple
+
+@app.route('/model3D')
+def outes():
+    return render_template('model3D.html')
 
 if __name__ == '__main__':
-    app.run(debug='true')
+    app.run(host='0.0.0.0',debug='true')
