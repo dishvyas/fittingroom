@@ -58,14 +58,16 @@ def get2dfit(TSHIRTLOC, PERSONPIC,LS,RS,TOP,BOT):
 
     #Translate facial object based on input object.
 
-    y = TOP[1] #600 #Top 1st field
+    y = TOP[1] - 350 #600 #Top 1st field
     eye_left = LS #(240,1432) #Left Shoulder
     eye_right = RS #(1619,1422) #Right Shoulder
-    x=eye_right[0]
+    x=eye_left[0]
     w=eye_right[0]
     bottom = BOT[1] #2280 #Bottom 1st field
-    # print(x,w,y)
-
+    print(y)
+    # import matplotlib.pyplot as plt
+    # plt.imshow(img)
+    # plt.show()
     try:
         #cv2.line(img_copy, eye_left, eye_right, color=(0, 255, 255))
         degree = np.rad2deg(np.arctan2(eye_left[0] - eye_right[0], eye_left[1] - eye_right[1]))
@@ -94,11 +96,14 @@ def get2dfit(TSHIRTLOC, PERSONPIC,LS,RS,TOP,BOT):
     glasses_resize_rotated = ndimage.rotate(glasses_resize, (degree+90))
     # print(type(x), type(w))
     glass_rec_rotated = ndimage.rotate(img[y + glass_trans:y + yG + glass_trans, eye_left[0]:eye_right[0]], (degree+90))
-
+    
     #blending with rotation
     h5, w5, s5 = glass_rec_rotated.shape
-    rec_resize = img_copy[y + glass_trans:y + h5 + glass_trans, x:x + w5]
-    blend_glass3 = blend_transparent(rec_resize , glasses_resize_rotated)
-    img_copy[y + glass_trans:y + h5 + glass_trans, x:x+w5 ] = blend_glass3
 
-    cv2.imwrite('~\result.jpg',img_copy)
+    # x X+w5
+    rec_resize = img_copy[y + glass_trans:y + h5 + glass_trans, x:x+w5]
+    blend_glass3 = blend_transparent(rec_resize , glasses_resize_rotated)
+    img_copy[y + glass_trans:y + h5 + glass_trans, x:x+w5] = blend_glass3
+
+    cv2.imwrite('/home/dishant/Desktop/Assignments/Hackathon/static/r2esult.jpg',img_copy)
+get2dfit('/home/dishant/Desktop/Assignments/Hackathon/templates/t3.png',"/home/dishant/Desktop/Assignments/Hackathon/static/uploads/exp1.jpg",(258,1444),(1620,1424),(976,932),(904,2312)) 

@@ -1,0 +1,13 @@
+<html>
+<head>
+  <title>Babylon.js Visddewer - Display a 3D model</title>
+  <script src={{url_for('static', filename='im.js')  }}></script>
+</head>
+<body>
+  <div style="height:50%; width:50%; background:#000000">
+    <babylon model={{url_for('static', filename='model2.glb')  }} templates.main.params.fill-screen="true"></babylon>
+  </div>
+  <br />
+  <!-- <input type="button" value="Next" onclick=""> -->
+  </body>
+</html>

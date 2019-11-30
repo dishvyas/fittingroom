@@ -64,7 +64,7 @@ def register():
 # def model():
 @app.route('/results')
 def routes():
-    return render_template('results.html')
+    return render_template('products.html')
 
 @app.route('/twodmodel')
 def twodmodel():
@@ -84,12 +84,17 @@ def twodmodel():
     for i in range(0,4):
         ptuple.append((points[k],points[k+1]))
         k+= 2
-    get2dfit('/home/dishant/Desktop/Assignments/Hackathon/templates/2d.png',"/home/dishant/Desktop/Assignments/Hackathon/static/uploads/exp1.jpg",ptuple[0],ptuple[1],ptuple[2],ptuple[3])
-    return ptuple
+    get2dfit('/home/dishant/Desktop/Assignments/Hackathon/templates/t1.png',"/home/dishant/Desktop/Assignments/Hackathon/static/uploads/exp1.jpg",ptuple[0],ptuple[1],ptuple[2],ptuple[3])
+    # print (ptuple)
+    return render_template('image.html')
 
-@app.route('/model3D')
+@app.route('/modeld')
 def outes():
     return render_template('model3D.html')
+
+@app.route('/modeld1')
+def kjhjk():
+    return render_template('model3D1.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug='true')
