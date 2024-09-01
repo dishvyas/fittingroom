@@ -1,0 +1,64 @@
+{% extends 'fittingroom/login_base.html' %}
+{% load static %}
+{% block content %}
+    <form class="form-signin" method="post" >{% csrf_token %}
+        <h2 class="form-signin-heading">Create an Account</h2>
+
+        {% if form.errors %}
+            <p style="color: red">There were some errors in your form. Please correct them and try again.</p>
+        {% endif %}
+
+        <table>
+            <tr>
+                <td>{{ form.first_name.label_tag }}</td>
+                <td>{{ form.first_name }}</td>
+            </tr>
+            <tr class="blank_row">
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td>{{ form.last_name.label_tag }}</td>
+                <td>{{ form.last_name }}</td>
+            </tr>
+            <tr class="blank_row">
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td>{{ form.username.label_tag }}</td>
+                <td>{{ form.username }}</td>
+            </tr>
+            <tr class="blank_row">
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td>{{ form.email.label_tag }}</td>
+                <td>{{ form.email }}</td>
+            </tr>
+            <tr class="blank_row">
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td>{{ form.password1.label_tag }}</td>
+                <td>{{ form.password1 }}</td>
+            </tr>
+            <tr class="blank_row">
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td>{{ form.password2.label_tag }}</td>
+                <td>{{ form.password2 }}</td>
+            </tr>
+            <tr class="blank_row">
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td>{{ form.number.label_tag }}</td>
+                <td>{{ form.number }}</td>
+            </tr>
+        </table>
+
+        <button class="btn btn-lg btn-block" type="submit" style="background-color: black; color: white">Register</button>
+        <br>
+        <a href="{% url 'login' %}" style="color: black"><span class="glyphicon glyphicon-log-in"></span> Already have an account? Sign in</a>
+    </form>
+{% endblock %}
