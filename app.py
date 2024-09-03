@@ -56,12 +56,6 @@ def move_forward():
 
 @app.route("/upload", methods=['GET', 'POST'])
 def upload():
-    """
-    Handle file uploads.
-
-    Returns:
-        str: Rendered HTML content for the upload page or the photo display page.
-    """
     if request.method == 'GET':
         return render_template('uploadphoto.html')
     
@@ -76,8 +70,13 @@ def upload():
             filename = file.filename
             save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(save_path)
+
+            get2dfit('templates/t1.png', save_path)
+
+            fitted_image_path = os.path.join(app.config['UPLOAD_FOLDER'], 'fitted_result.jpg')
+
             flash('File successfully uploaded', 'success')
-            return render_template("photo.html", image_path=save_path)
+            return render_template("photo.html", image_path=fitted_image_path)
 
     flash('File upload failed', 'danger')
     return redirect(url_for('upload'))

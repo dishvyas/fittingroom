@@ -1,122 +1,104 @@
-#!/usr/bin/python
-
-import cv2
 import numpy as np
 from scipy import ndimage
+import cv2
+import mediapipe as mp
 import os
 
+# Base Directory
+base_dir = os.path.dirname(os.path.abspath(__file__))
 
-#Resize an image to a certain width
-def resize(img, width,height = None):
-   
+# Resize an image to a certain width and height while maintaining aspect ratio
+def resize(img, width, height=None):
     if height is not None:
-        img = cv2.resize(img, (width,height), interpolation=cv2.INTER_AREA)
+        img = cv2.resize(img, (width, height), interpolation=cv2.INTER_AREA)
     else:
         r = float(width) / img.shape[1]
         dim = (width, int(img.shape[0] * r))
         img = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
-        cv2.imshow('a',img)
-
     return img
 
-#Combine an image that has a transparency alpha channel
-def blend_transparent(face_img, sunglasses_img):
+# Combine an image that has a transparency alpha channel
+def blend_transparent(face_img, overlay_img):
+    overlay_img_rgb = overlay_img[:, :, :3]  # RGB channels
+    overlay_mask = overlay_img[:, :, 3:]  # Alpha channel
 
-    overlay_img = sunglasses_img[:,:,:3]
-    overlay_mask = sunglasses_img[:,:,3:]
-    
     background_mask = 255 - overlay_mask
 
     overlay_mask = cv2.cvtColor(overlay_mask, cv2.COLOR_GRAY2BGR)
     background_mask = cv2.cvtColor(background_mask, cv2.COLOR_GRAY2BGR)
 
     face_part = (face_img * (1 / 255.0)) * (background_mask * (1 / 255.0))
-    overlay_part = (overlay_img * (1 / 255.0)) * (overlay_mask * (1 / 255.0))
+    overlay_part = (overlay_img_rgb * (1 / 255.0)) * (overlay_mask * (1 / 255.0))
 
     return np.uint8(cv2.addWeighted(face_part, 255.0, overlay_part, 255.0, 0.0))
 
-#Find the angle between two points
-def angle_between(point_1, point_2):
-    angle_1 = np.arctan2(*point_1[::-1])
-    angle_2 = np.arctan2(*point_2[::-1])
-    return np.rad2deg((angle_1 - angle_2) % (2 * np.pi))
-
-
-#Start main program
-def get2dfit(TSHIRTLOC, PERSONPIC,LS,RS,TOP,BOT):
-
-    glasses = cv2.imread(TSHIRTLOC, -1)
-    if glasses is None:
-        raise FileNotFoundError(f"Could not load image from {TSHIRTLOC}")
-
-    img = cv2.imread(PERSONPIC)
-    if img is None:
-        raise FileNotFoundError(f"Could not load image from {PERSONPIC}")
-    img_copy = img.copy()
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-    # import matplotlib.pyplot as plt
-    # plt.imshow(img)
-    # plt.show()  
-    # exit()
-
-    ##############   Resize and rotate glasses   ##############
-
-    #Translate facial object based on input object.
-
-    y = TOP[1] - 350 #600 #Top 1st field
-    eye_left = LS #(240,1432) #Left Shoulder
-    eye_right = RS #(1619,1422) #Right Shoulder
-    x=eye_left[0]
-    w=eye_right[0]
-    bottom = BOT[1] #2280 #Bottom 1st field
-    print(y)
-    # import matplotlib.pyplot as plt
-    # plt.imshow(img)
-    # plt.show()
-    try:
-        #cv2.line(img_copy, eye_left, eye_right, color=(0, 255, 255))
-        degree = np.rad2deg(np.arctan2(eye_left[0] - eye_right[0], eye_left[1] - eye_right[1]))
-
-    except:
-        pass
-
-    eye_center = (eye_left[1] + eye_right[1]) / 2
-
-    #Sunglasses translation
-    glass_trans = int(.2 * (eye_center - y))
-
-    #Funny tanslation
-    #glass_trans = int(-.3 * (eye_center - y ))
-
-    # Mask translation
-    #glass_trans = int(-.8 * (eye_center - y))
-
-    face_width = abs(eye_left[0] - eye_right[0])
-
-    # resize_glasses
-    glasses_resize = resize(glasses, face_width,bottom-y)
-
-    # Rotate glasses based on angle between eyes
-    yG, xG, cG = glasses_resize.shape
-    glasses_resize_rotated = ndimage.rotate(glasses_resize, (degree+90))
-    # print(type(x), type(w))
-    glass_rec_rotated = ndimage.rotate(img[y + glass_trans:y + yG + glass_trans, eye_left[0]:eye_right[0]], (degree+90))
+# Function to perform 2D fitting
+def get2dfit(TSHIRTLOC, PERSONPIC):
+    """
+    Perform the 2D fitting on a provided image.
     
-    #blending with rotation
-    h5, w5, s5 = glass_rec_rotated.shape
+    Args:
+        TSHIRTLOC (str): Path to the t-shirt image.
+        PERSONPIC (str): Path to the person's image.
+    
+    Saves the result to 'fitted_result.jpg' in the static/uploads directory.
+    """
+    # Initialize MediaPipe pose solution
+    mp_pose = mp.solutions.pose
+    pose = mp_pose.Pose()
+    mp_drawing = mp.solutions.drawing_utils
 
-    # x X+w5
-    rec_resize = img_copy[y + glass_trans:y + h5 + glass_trans, x:x+w5]
-    blend_glass3 = blend_transparent(rec_resize , glasses_resize_rotated)
-    img_copy[y + glass_trans:y + h5 + glass_trans, x:x+w5] = blend_glass3
+    # Load the images from the provided paths
+    image = cv2.imread(PERSONPIC)
+    tshirt_path = TSHIRTLOC
 
-    final = os.path.join(base_dir, 'static', 'r2esult.jpg')
-    
-    cv2.imwrite(final, img_copy)
-    
-    
-base_dir = os.path.dirname(os.path.abspath(__file__))  # Get the base directory of the script
-tshirt_loc = os.path.join(base_dir, 'templates', 't1.png')
-person_pic = os.path.join(base_dir, 'static', 'uploads', 'exp1.jpg')
-get2dfit(tshirt_loc, person_pic, (258, 1444), (1620, 1424), (976, 932), (904, 2312))
+    # Convert the image to RGB (MediaPipe expects RGB)
+    image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+    # Process the image to detect poses
+    results = pose.process(image_rgb)
+
+    # Define landmark indices
+    LEFT_SHOULDER = mp_pose.PoseLandmark.LEFT_SHOULDER
+    RIGHT_SHOULDER = mp_pose.PoseLandmark.RIGHT_SHOULDER
+    LEFT_HIP = mp_pose.PoseLandmark.LEFT_HIP
+    RIGHT_HIP = mp_pose.PoseLandmark.RIGHT_HIP
+
+    if results.pose_landmarks:
+        # Get left shoulder, right shoulder, left hip, and right hip landmarks
+        LS = results.pose_landmarks.landmark[LEFT_SHOULDER]
+        RS = results.pose_landmarks.landmark[RIGHT_SHOULDER]
+        LH = results.pose_landmarks.landmark[LEFT_HIP]
+        RH = results.pose_landmarks.landmark[RIGHT_HIP]
+
+        # Calculate midpoint for neck (TOP) and hips (BOT)
+        TOP = ((LS.x + RS.x) / 2, (LS.y + RS.y) / 2)
+        BOT = ((LH.x + RH.x) / 2, (LH.y + RH.y) / 2)
+
+        # Calculate width and height for the t-shirt
+        tshirt_width = int(abs(LS.x - RS.x) * image.shape[1] * 1.2)  # Slightly wider than shoulder width
+        tshirt_height = int(abs(TOP[1] - BOT[1]) * image.shape[0] * 1.2)  # Adjust based on torso height
+
+        # Load and resize the t-shirt image
+        tshirt = cv2.imread(tshirt_path, -1)
+        tshirt = resize(tshirt, tshirt_width, tshirt_height)
+
+        # Adjust y_offset to align t-shirt's neckline with subject's neckline
+        neck_offset_factor = 0.15  # Adjust this factor to move the t-shirt up or down
+        x_offset = int(TOP[0] * image.shape[1] - tshirt_width / 2)
+        y_offset = int(TOP[1] * image.shape[0] - neck_offset_factor * tshirt_height)
+
+        # Ensure the overlay is within image bounds
+        x_offset = max(0, min(x_offset, image.shape[1] - tshirt_width))
+        y_offset = max(0, min(y_offset, image.shape[0] - tshirt_height))
+
+        # Create region of interest for blending
+        roi = image[y_offset:y_offset + tshirt_height, x_offset:x_offset + tshirt_width]
+
+        # Blend the t-shirt onto the body
+        blended = blend_transparent(roi, tshirt)
+        image[y_offset:y_offset + tshirt_height, x_offset:x_offset + tshirt_width] = blended
+
+    # Save the fitted image
+    final = os.path.join(base_dir, 'static', 'uploads', 'fitted_result.jpg')
+    cv2.imwrite(final, image)  # Save the modified image
