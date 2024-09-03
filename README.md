@@ -1,4 +1,4 @@
-Virtual Fitting Room
+[Virtual Fitting Room
 =======================
 
 Overview
@@ -76,11 +76,23 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-### 6\. Run the Application
+### 6\. 
+Download the necessary pre-trained model for landmark detection:
+
+	•	File: shape_predictor_68_face_landmarks.dat or the appropriate model you’re using.
+	•	Source: Available here - http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2
+
+Place the model file in a directory accessible by the Flask app, typically under the project root or a dedicated models/ directory.
+
+### 7\. Run the Application
 ```bash
-python manage.py runserver
+python manage.py runserver  # Starts the Django app
+python app.py  # Starts the Flask app
 ```
-The application will start on http://127.0.0.1:8000/.
+The application will start on:
+
+	•	Django: http://127.0.0.1:8000/
+	•	Flask: http://127.0.0.1:5001/
 
 Usage
 -----
@@ -94,33 +106,21 @@ File Structure
 --------------
 ```plaintext
 .
-
-├── app.py                     # Flask application file
-
-├── model2d.py                 # Handles 2D model fitting logic
-
-├── fittingroom/               # Django app for user management and authentication
-
-│   ├── __init__.py
-
-│   ├── settings.py            # Django settings
-
-│   ├── urls.py                # URL routing for Django app
-
-│   ├── views.py               # Views for handling HTTP requests
-
-│   ├── templates/             # HTML templates
-
-│   ├── static/                # Static files (CSS, JS, images)
-
-│   ├── migrations/            # Database migrations
-
-│   ├── forms.py               # Django forms for user creation and login
-
-├── requirements.txt           # Python dependencies
-
-├── README.md                  # This README file
-
+├── app.py                     # Flask application file
+├── model2d.py                 # Handles 2D model fitting logic
+├── fittingroom/               # Django app for user management and authentication
+│   ├── __init__.py
+│   ├── settings.py            # Django settings
+│   ├── urls.py                # URL routing for Django app
+│   ├── views.py               # Views for handling HTTP requests
+│   ├── templates/             # HTML templates
+│   ├── static/                # Static files (CSS, JS, images)
+│   ├── migrations/            # Database migrations
+│   ├── forms.py               # Django forms for user creation and login
+├── models/                    # Directory to hold pre-trained models
+│   ├── shape_predictor_68_face_landmarks.dat # Pre-trained model for landmark detection
+├── requirements.txt           # Python dependencies
+├── README.md                  # This README file
 └── ...
 ```
 
@@ -141,3 +141,4 @@ License
 -------
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+](https://github.com/dishvyas/fittingroom)
