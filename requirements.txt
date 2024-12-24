@@ -14,7 +14,7 @@ fonttools==4.53.1
 itsdangerous==2.2.0
 jax==0.4.31
 jaxlib==0.4.31
-Jinja2==3.1.4
+Jinja2==3.1.5
 kiwisolver==1.4.5
 MarkupSafe==2.1.5
 matplotlib==3.9.2
